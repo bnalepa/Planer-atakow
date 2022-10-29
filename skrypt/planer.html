@@ -1,0 +1,516 @@
+<head>
+    <script src="jquery-3.5.1.min.js"></script>
+    <style>
+    .input {
+        width: 40px;
+    }
+    table, td, th {
+    border: 1px solid black;
+    }
+    table {
+    width: 100%;
+    border-collapse: collapse;
+    }
+    .podsumowanie {
+        height: 100px;
+    }
+    textarea {
+        font-size: 10px;
+    }
+
+    </style>
+    <script>
+        cele=[];
+        tabela_gracze=[];
+            // by Foxtal ;D
+        /*if(localStorage.getItem('tabela_gracze')==null)
+        {
+            localStorage.setItem('tabela_gracze',[]);
+            console.log("op1");
+        } else {
+            tabela_gracze=localStorage.getItem('tabela_gracze');
+            console.log(localStorage.getItem('tabela_gracze'));
+        }
+
+        if(localStorage.getItem('cele')==null)
+        {
+            localStorage.setItem('cele',[]);
+        } else {
+            tabela_gracze=localStorage.getItem('cele');
+        }*/
+        
+        //////////////////// tabela gracze 
+        
+     /*   tabela_gracze=[
+    [
+        "foxtal",
+        "9",
+        "8",
+        "7",
+        "6",
+        "5",
+        "4",
+        "3",
+        "2",
+        "1",
+        "9",
+        "8",
+        "7"
+    ],
+    [
+        "zorander",
+        "10",
+        "4",
+        "2",
+        "0",
+        "10"
+    ],
+    [
+        "karzeł",
+        "5",
+        "0",
+        "0",
+        "0",
+        "4"
+    ],
+    [
+        "Cer",
+        "0",
+        "0",
+        "0",
+        "0",
+        "6"
+    ]
+] 
+
+    cele=[[
+        "246|123",
+        [
+            "foxtal",
+            "5",
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            "2",
+            "0",
+            "0",
+            "0",
+            "0"
+        ],
+        [
+            "zorander",
+            "3",
+            "0",
+            "0",
+            "0",
+            "3"
+        ],
+        [
+            "Cer",
+            "0",
+            "0",
+            "0",
+            "0",
+            "2"
+        ]
+    ],
+    [
+        "525|212",
+        [
+            "foxtal",
+            "4",
+            "5",
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            "0"
+        ],
+        [
+            "Cer",
+            "0",
+            "0",
+            "0",
+            "0",
+            "4"
+        ]
+    ],
+    [
+        "457|672",
+        [
+            "zorander",
+            "5",
+            "4",
+            "0",
+            "0",
+            "0"
+        ]
+    ]
+]*/
+////////////////////////
+
+        function dodawanie_graczy()
+        {
+            text="<table style='text-align:center;'><tr><td>Nick:</td><td>Full off:</td><td>3/4 off:</td><td>1/2 off:</td><td>1/4 off:</td><td>Szlachcice (w każdym polu osobno):</td></tr> <tr><td><input id='nick'></td>";
+            text+="<td><input class='input' id='off'></td><td><input class='input' id='off1'></td><td> <input class='input' id='off2'></td><td><input class='input' id='off3'></td><td id='grube'> <input class='input' id='g1'> ";
+            text+="<input class='input' id='g2'> <input class='input' id='g3'> <input class='input' id='g4'> ";
+            text+="<input type='button' value='Dodaj kolejne 4 pola' onclick='dodaj_pola()'><div id='dodane_grube'></div></td></tr></table>";
+            // przycisk "zapisz"
+            text+="<input class='zapisz' id='"+tabela_gracze.length+"' style='float:right; margin:110 250 10 10' type='button' value='Dodaj gracza' onclick='dodaj_gracza()'>";
+            $("#body")[0].innerHTML=text;
+            podsumowanie();
+        }
+
+        function wpisz_zera()
+        {
+            if($("#off")[0].value=="")
+            {
+                $("#off")[0].value=0;
+            }
+            if($("#off1")[0].value=="")
+            {
+                $("#off1")[0].value=0;
+            }
+            if($("#off2")[0].value=="")
+            {
+                $("#off2")[0].value=0;
+            }
+            if($("#off3")[0].value=="")
+            {
+                $("#off3")[0].value=0;
+            }
+        }
+
+        function dodaj_gracza(a)
+            {   
+                wpisz_zera();
+                //nick + offy
+                console.log(tabela_gracze);
+                tabela_gracze[$(".zapisz")[0].id]=[];
+                tabela_gracze[$(".zapisz")[0].id][0]=$("#nick")[0].value;   
+                tabela_gracze[$(".zapisz")[0].id][1]=$("#off")[0].value;
+                tabela_gracze[$(".zapisz")[0].id][2]=$("#off1")[0].value;
+                tabela_gracze[$(".zapisz")[0].id][3]=$("#off2")[0].value;
+                tabela_gracze[$(".zapisz")[0].id][4]=$("#off3")[0].value;
+                //grube
+                max=5;
+                if($("#g5").length==1)
+                {
+                    max=9;
+                }
+
+                for(i=1;i<max;i++)
+                {
+                    if($("#g"+i)[0].value=="")
+                    {
+                        break;
+                    }
+                    tabela_gracze[$(".zapisz")[0].id][i+4]=$("#g"+i)[0].value;
+                }
+
+                //powiadomienie, zwiększ id
+                $("#tekst")[0].innerHTML="Dodano gracza: "+$("#nick")[0].value;
+                $(".zapisz")[0].id=(parseInt($(".zapisz")[0].id)+1);
+                podsumowanie();
+                wyczyszczenie();
+            }
+
+        function dodaj_pola()
+            {
+                for(i=5; i<9;i++)
+                {
+                    $("#dodane_grube")[0].innerHTML+='<input class="input" id="g'+i+'"> ';
+                }
+            }
+        function podsumowanie()
+        {
+            text="<table style='text-align:center;'><tr><td>Lp.</td><td>Gracz</td><td>Full offów</td><td>3/4 offów</td><td>1/2 offów</td><td>1/4 offów</td><td>Szlachcice</td><td>Zmień</td><tr>";
+            suma_off=0;
+            suma_off1=0;
+            suma_off2=0;
+            suma_off3=0;
+            suma_grube=0;
+            for(i=0; i<tabela_gracze.length;i++)
+            {
+                grube_gracza=0;
+                for(j=5; j<tabela_gracze[i].length;j++)
+                {
+                    grube_gracza+=parseInt(tabela_gracze[i][j])
+                }
+                text+="<tr><td>"+(i+1)+".</td><td id='gracz0"+i+"'>"+tabela_gracze[i][0]+"</td><td id='gracz1"+i+"'>"+tabela_gracze[i][1]+"</td><td id='gracz2"+i+"'>"+tabela_gracze[i][2]+"</td><td id='gracz3"+i+"'>"+tabela_gracze[i][3]+"</td><td id='gracz4"+i+"'>"+tabela_gracze[i][4]+"</td><td id='gracz5"+i+"'>"+grube_gracza+"</td><td  id='gracz6"+i+"'><input type='button' onclick='edytuj("+i+")' value='Edytuj'></td></tr>";
+                suma_off+=parseInt(tabela_gracze[i][1]);
+                suma_off1+=parseInt(tabela_gracze[i][2]);
+                suma_off2+=parseInt(tabela_gracze[i][3]);
+                suma_off3+=parseInt(tabela_gracze[i][4])  
+                suma_grube+=grube_gracza;
+            }
+            text+="<tr><td></td><td>Suma:</td><td>"+suma_off+"</td><td>"+suma_off1+"</td><td>"+suma_off2+"</td><td>"+suma_off3+"</td><td>"+suma_grube+"</td></tr>"
+            $("#podsumowanie")[0].innerHTML=text;
+            
+        }
+        function edytuj(a)
+        {
+            for(i=1;i<tabela_gracze[a].length;i++)
+            {
+                if(i>5)
+                {
+                    $("#gracz5"+a)[0].innerHTML+="<input class='input' id='edycja_gracz"+i+a+"' type='number' value="+tabela_gracze[a][i]+" min=0>";
+                } else {
+                    $("#gracz"+i+a)[0].innerHTML="<input class='input' id='edycja_gracz"+i+a+"' type='number' value="+tabela_gracze[a][i]+" min=0>";
+                }
+                
+            }
+            $("#gracz6"+a)[0].innerHTML="<input type='button' onclick='zapisz_gracz("+a+")' value='Zapisz'>";       
+        }
+
+        function zapisz_gracz(a)
+        {
+            for(i=1;i<tabela_gracze[a].length;i++)
+            {
+                tabela_gracze[a][i]=$("#edycja_gracz"+i+a)[0].value;
+            }
+            podsumowanie();
+        }
+        
+        function wyczyszczenie()
+        {
+            $("#nick")[0].value='';
+            $("#off")[0].value='';
+            $("#off1")[0].value='';
+            $("#off2")[0].value='';
+            $("#off3")[0].value='';
+            $("#grube")[0].innerHTML="<input class=\"input\" id=\"g1\"> <input class=\"input\" id=\"g2\"> <input class=\"input\" id=\"g3\"> <input class=\"input\" id=\"g4\"> <input type=\"button\" value=\"Dodaj kolejne 4 pola\" onclick=\"dodaj_pola()\"><div id=\"dodane_grube\"></div>";
+
+        }
+        function przejdz_dodawanie()
+        {
+            $("#cale")[0].innerHTML="<div id='tekst'></div><div id='body'></div><div id='podsumowanie'></div>";
+            dodawanie_graczy();
+        }
+
+        function przejdz_rozpisywanie()
+        {
+            $("#cale")[0].innerHTML="Cel ataku: <input id='cel'><div id='podsumowanie'></div><br><input type='button' value='Wygeneruj' onclick='generuj()'><br><div id='wioski'></div>";
+            cel=[];
+            text="<table style='text-align:center;'><tr><td>Lp.</td><td>Gracz</td><td>Full offów</td><td>3/4 offów</td><td>1/2 offów</td><td>1/4 offów</td><td>Szlachcice</td><td>Wybierz gracza</td></tr>";
+            suma_off=0;
+            suma_off1=0;
+            suma_off2=0;
+            suma_off3=0;
+            suma_grube=0;
+            for(i=0; i<tabela_gracze.length;i++)
+            {
+                grube_gracza='';
+                for(j=5; j<tabela_gracze[i].length;j++)
+                {
+                    grube_gracza+=tabela_gracze[i][j]+" ";
+                    suma_grube+=parseInt(tabela_gracze[i][j]);
+                }
+                text+="<tr><td>"+(i+1)+".</td><td id='"+i+"0'>"+tabela_gracze[i][0]+"</td><td id='"+i+"1'>"+tabela_gracze[i][1]+"</td><td id='"+i+"2'>"+tabela_gracze[i][2]+"</td><td id='"+i+"3'>"+tabela_gracze[i][3]+"</td><td id='"+i+"4'>"+tabela_gracze[i][4]+"</td><td  id='"+i+"5'>"+grube_gracza+"</td><td><input type='button' id='gracz"+i+"' value='Wybierz gracza' onclick='wybierz_gracza("+i+")'></td></tr>";
+                suma_off+=parseInt(tabela_gracze[i][1]);
+                suma_off1+=parseInt(tabela_gracze[i][2]);
+                suma_off2+=parseInt(tabela_gracze[i][3]);
+                suma_off3+=parseInt(tabela_gracze[i][4]);
+            }
+            text+="<tr><td></td><td>Pozostało:</td><td>"+suma_off+"</td><td>"+suma_off1+"</td><td>"+suma_off2+"</td><td>"+suma_off3+"</td><td>"+suma_grube+"</td></tr>"
+            text+="<input class='zapisz' id='"+tabela_gracze.length+"' style='float:right; margin:10 10 10 10' type='button' value='Zapisz' onclick='zapisz_cel()'>";
+
+            $("#podsumowanie")[0].innerHTML=text;
+            wyswietl_wioski(); 
+        }
+        function wybierz_gracza(id_gracza)
+        {
+            cel.push(id_gracza);
+            $("#gracz"+id_gracza).attr("disabled", true);
+            //pole edycji z max
+            for(i=1;i<=4;i++)
+            {
+            $("#"+id_gracza+i)[0].innerHTML="<input class='input' id='w"+id_gracza+i+"' type='number' value=0 min=0 max="+$("#"+id_gracza+i)[0].innerHTML+"> (max "+$("#"+id_gracza+i)[0].innerHTML+")";
+            }
+            text='';
+            for(j=5; j<tabela_gracze[id_gracza].length;j++)
+                {
+                    text+="<input class='input' id='w"+id_gracza+j+"'' type='number' value=0 min=0 max="+tabela_gracze[id_gracza][j]+"> (max "+tabela_gracze[id_gracza][j]+")<br>";
+                }
+            
+            $("#"+id_gracza+"5")[0].innerHTML=text;
+        }
+        function zapisz_cel()
+        {
+            lp=cele.length;
+            cele[lp]=[];
+            cele[lp][0]=$("#cel")[0].value;
+            for(i=0;i<cel.length;i++)
+            { 
+                cele[lp][i+1]=[];
+                cele[lp][i+1][0]=$("#"+cel[i]+"0")[0].innerHTML;
+                for(j=1;j<tabela_gracze[cel[i]].length;j++)
+                {
+                    cele[lp][i+1][j]=$("#w"+cel[i]+j)[0].value;
+                    tabela_gracze[cel[i]][j]-=parseInt($("#w"+cel[i]+j)[0].value);
+                }
+            } 
+            przejdz_rozpisywanie();
+        }
+
+        function wyswietl_wioski()
+        {
+            text="<table style='text-align:center;'><tr><td>Lp.</td><td>Wioska/Gracz</td><td>Full offów</td><td>3/4 offów</td><td>1/2 offów</td><td>1/4 offów</td><td>Szlachcice</td><td>Edytuj</td></tr>";
+            for(i=0;i<cele.length;i++)
+            {
+                text+="<tr><td>"+(i+1)+".</td><td id='wioska"+i+"'>"+cele[i][0]+"</td><td></td><td></td><td></td><td></td><td><input id='wioska_nr"+i+"' type='hidden' value="+cele[i].length+"></td><td id='przycisk_edytuj"+i+"'><input type='button' value='Edytuj wioskę' onclick='edytuj_cel("+i+")'></td></tr>";
+                for(j=1;j<cele[i].length;j++)
+                {
+                text+="<tr><td></td><td id='wioska_tabela"+i+j+"0'>"+cele[i][j][0]+"</td>"
+                    suma=0;
+                    for(z=1;z<cele[i][j].length;z++)
+                    {
+                        if(z>=5)
+                        {
+                            suma+=parseInt(cele[i][j][z]);
+                        } else {
+                            text+="<td id='wioska_tabela"+i+j+z+"'>"+cele[i][j][z]+"</td>";
+                        }
+                        
+                        
+                    }
+                text+="<td id='wioska_tabela"+i+j+"5'>"+suma+"</td>";
+                text+="<td></td></tr>";
+                }
+            }
+
+            $("#wioski")[0].innerHTML=text;
+        }
+
+        function edytuj_cel(a)
+        {
+            $("#wioska"+a)[0].innerHTML="<input type='text' id='id_wioski"+a+"' style='width:55px' value="+$("#wioska"+a)[0].innerHTML+">";
+            $("#przycisk_edytuj"+a)[0].innerHTML="<input type='button' value='Zapisz' onclick='zapisz_cela("+a+")'>";
+            for(i=1;i<cele[a].length;i++)
+                {
+                    
+                    // nick - console.log($("#wioska_tabela"+a+i+"0")[0].innerHTML);
+
+                    for(j=1;j<=4;j++)
+                    {   
+                        $("#wioska_tabela"+a+i+j)[0].innerHTML="<input type='number' id='zmiana_wioska"+a+i+j+"' style='width:35px' min=0 value="+$('#wioska_tabela'+a+i+j)[0].innerHTML+" >";
+
+                    }
+                }
+
+        }
+
+        function zapisz_cela(a)
+        {
+            cele[a][0]=$("#id_wioski"+a)[0].value;
+            for(i=1;i<cele[a].length;i++)
+            {   
+                for(j=1;j<=4;j++)
+                {
+                    if(cele[a][i][j]!=$('#zmiana_wioska'+a+i+j)[0].value)
+                    {
+                        for(z=0;z<tabela_gracze.length;z++)
+                        {
+                            if(tabela_gracze[z][0]==$("#wioska_tabela"+a+i+"0")[0].innerHTML)
+                            {
+                                tabela_gracze[z][j]-=(parseInt($('#zmiana_wioska'+a+i+j)[0].value)-cele[a][i][j]);
+                                cele[a][i][j]=parseInt($('#zmiana_wioska'+a+i+j)[0].value);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            przejdz_rozpisywanie();
+        }
+
+        function generuj()
+        {
+            // gracze=['foxtal','karzeł'];
+            text="gracze=[";
+            for(i=0;i<tabela_gracze.length;i++)
+            {    
+                text+="'"+tabela_gracze[i][0]+"'";
+                if(i<tabela_gracze.length-1)
+                {
+                    text+=",";
+                } 
+            }
+            text+="];"
+            // cel['karzeł']=[['723|412', 0, 0, 1, 0, 2, 3],['521|341', 4, 2, 1, 0, 2, 3, 2]];
+            for(i=0;i<tabela_gracze.length;i++)
+            {    
+                licznik=0;
+                text+="cel['"+tabela_gracze[i][0]+"']=[];";
+                for(j=0;j<cele.length;j++)
+                {
+                    for(z=1;z<cele[j].length;z++)
+                    {
+                        if(tabela_gracze[i][0]==cele[j][z][0])
+                        {
+                            text+="cel['"+tabela_gracze[i][0]+"']["+licznik+"]=[];";
+                            text+="cel['"+tabela_gracze[i][0]+"']["+licznik+"][0]=['"+cele[j][0]+"'];";
+                            for(k=1;k<cele[j][z].length;k++)
+                            {
+                                text+="cel['"+tabela_gracze[i][0]+"']["+licznik+"].push("+cele[j][z][k]+");";
+                            }
+                            licznik++;
+                        }
+
+                    }
+                }
+            }
+            // wioski['123|412']="Ataki czyszczące: foxtal, Vermira; Szlachcice: Zorander, karzeł";
+            for(i=0;i<cele.length;i++)
+            {
+                ataki='';
+                grube='';
+                for(j=1;j<cele[i].length;j++)
+                {
+                    gruby='';
+                    if(cele[i][j][1]!=0||cele[i][j][2]!=0||cele[i][j][3]!=0||cele[i][j][4]!=0)
+                    {
+                        ataki+=" "+cele[i][j][0]+", ";
+                    }
+                    for(k=5;k<cele[i][j].length;k++)
+                    {
+                        console.log(cele[i][j][k]);
+                        if(cele[i][j][k]!=0)
+                        {
+                            gruby=cele[i][j][0];
+                        }
+                    }
+                    if(gruby!='')
+                    {
+                        grube+=" "+gruby+", "; 
+                    }
+                }
+                text+="wioski['"+cele[i][0]+"']='Ataki czyszczące:"+ataki+"Szlachcice:"+grube+"';"
+            }
+            // wypisanie
+            $("#cale")[0].innerHTML="<textarea id='podsumowanie' rows='70' cols='250'>"+text+"</textarea>";
+        }
+
+    </script>
+</head>
+<body>
+    <div id="menu">
+        <input type='button' value='Dodawanie graczy' onclick='przejdz_dodawanie()'>
+        <input type='button' value='Rozpisywanie' onclick='przejdz_rozpisywanie()'>
+    </div>
+    <div id="cale">
+        <div id='tekst'></div>
+        <div id='body'>
+        </div>
+        <div>
+        </div>
+    </div>
+</body>

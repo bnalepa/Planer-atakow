@@ -1,0 +1,32 @@
+// ==UserScript==
+// @name         Wiadomości akcja
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  try to take over the world!
+// @author       You
+// @include      *://*.plemiona.pl/game.php?*screen=mail&mode=new*
+// @grant        none
+// ==/UserScript==
+(function() {
+    temat="Cele na akcje";
+    trescg="[b]Witam,\\nAkcja wchodzi na 14.06.2021 r. [u]o wskazanych godzinach ;)[/u][/b]\\n\\n[b]Twoje cele do ataku:[/b]\\n";
+    trescd="\\n\\n\\n [i]Dokładniejsze dogranie mile widziane (do dogadania w grupie). \\nPostarajcie się za wszelką cenę wyrobić w czasie o każdych spóźnieniach informujcie współplemieńców którzy atakują razem z Wami oraz opiekunów akcji tj. [player]Zorander[/player] i [player]foxtal[/player]. [/i]\\n \\n[b]Obstawę do grubych dzielimy po równo!!! \\n \\nJeżeli mamy taką możliwość dogrywamy defa po grubych!!\\n \\nKatapulty[unit]catapult[/unit] ustawiamy na Koszary[building]barracks[/building]/Kuźnię[building]smith[/building]\\nKomendy radzie plus współplemieńców którzy atakują razem z Wami[/b]\\n \\n[spoiler=Jeżeli potrzebujecie narzędzia do rozpisania akcji proszę skorzystać z poradnika:][url]https://pl163.plemiona.pl/game.php?village=2028&screen=forum&screenmode=view_thread&forum_id=430&thread_id=6703[/url][/spoiler]\\n \\n[i]W razie jakichkolwiek pytań proszę pisać.[/i]\\nPozdrawiam";
+    gracze=[];
+    cel=[];
+    wioski=[];
+    ///////////////////////////////////////////
+    ///Tutaj wklej//
+    ///////////////////////////////////////////
+
+   
+    ///////////////////////////////////////////
+    ///////////////////////////////////////////
+    text="<div style='text-align:left'><select id='gracze' onchange=\"a=this[1].innerHTML;$('#to')[0].value=this[parseInt(this.value)+1].innerHTML;document.getElementsByName('subject')[0].value='"+temat+"';";
+    text+="$('#message')[0].value='"+trescg+"';x=cel[this[parseInt(this.value)+1].innerHTML];wojska='';for(i=0;i<x.length;i++){wojska+='\\n\\n'+x[i][0]+':\\n\\n';for(j=1;j<x[i].length;j++){if(x[i][j]!=0){switch(j){case 1:wojska+=x[i][j]+'x full off [b]na godz: 9:00:00-9:00:03[/b]:\\n';break;case 2:wojska+=x[i][j]+'x 3/4 off [b]na godz: 9:00:00-9:00:03[/b]:\\n';break;case 3:wojska+=x[i][j]+'x 1/2 off [b]na godz: 9:00:00-9:00:03[/b]:\\n';break;case 4:wojska+=x[i][j]+'x 1/4 off [b]na godz: 9:00:00-9:00:03[/b]:\\n';break;default:wojska+=x[i][j]+'x grube z obstawą [b]na godz: 9:00:04[/b]: \\n';}}}wojska+='[i]('+wioski[x[i][0]]+')[/i]';};$('#message')[0].value+=wojska;;$('#message')[0].value+='"+trescd+" ';\"><option>Wybierz gracza</option>";
+    for(i=0;i<gracze.length;i++)
+    {
+        text+="<option value="+i+" >"+gracze[i]+"</option>";
+    }
+    text+="</select><br>";
+    $("#bb_bar")[0].innerHTML+=text;
+})();
